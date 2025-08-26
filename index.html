@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Mừng Sinh Nhật Sakuko</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        :root {
+            --sakura-pink-light: #fbecec;
+            --sakura-pink-mid: #ffe9e9;
+            --sakura-pink-dark: #f0a3a3;
+            --cherry-blossom-petal: #ffb7c5;
+            --off-white: #fafafa;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--sakura-pink-light), #ffffff);
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .card-container {
+            width: 90%;
+            /* Tăng kích thước tối đa của thiệp */
+            max-width: 800px; 
+            /* Tăng chiều cao của thiệp */
+            height: 500px;
+            perspective: 1500px; /* Điều chỉnh perspective cho phù hợp */
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-container.open {
+            transform: rotateY(-180deg);
+        }
+
+        .card-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-front {
+            background-color: var(--sakura-pink-mid);
+            z-index: 2;
+        }
+
+        .card-inside {
+            display: flex;
+            transform: rotateY(180deg);
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0; /* Remove padding for full bleed image */
+        }
+
+        .page-left, .page-right {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-left {
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0; /* Remove padding for full bleed image */
+            background-color: var(--sakura-pink-light);
+            border-radius: 1rem 0 0 1rem;
+        }
+        
+        .page-left img {
+            width: 100%;
+            height: 100%;
+            /* Thay đổi từ 'cover' thành 'contain' để hiển thị toàn bộ ảnh */
+            object-fit: contain;
+            border-radius: 1rem 0 0 1rem;
+        }
+
+        /* Sakura background effect */
+        .sakura-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            border-radius: 1rem;
+        }
+
+        .sakura-petal {
+            position: absolute;
+            background-color: var(--cherry-blossom-petal);
+            opacity: 0;
+            clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
+            width: 15px;
+            height: 15px;
+            animation: fall 15s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translate(0, -10vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(calc(100vw - 200px), 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Adjust animation for different petals */
+        .sakura-petal:nth-child(1) { left: 15%; animation-delay: 0s; transform: scale(0.8); }
+        .sakura-petal:nth-child(2) { left: 25%; animation-delay: 2s; transform: scale(1.1); }
+        .sakura-petal:nth-child(3) { left: 35%; animation-delay: 4s; transform: scale(0.9); }
+        .sakura-petal:nth-child(4) { left: 45%; animation-delay: 6s; transform: scale(1.2); }
+        .sakura-petal:nth-child(5) { left: 55%; animation-delay: 8s; transform: scale(0.7); }
+        .sakura-petal:nth-child(6) { left: 65%; animation-delay: 1s; transform: scale(1.0); }
+        .sakura-petal:nth-child(7) { left: 75%; animation-delay: 3s; transform: scale(1.1); }
+        .sakura-petal:nth-child(8) { left: 85%; animation-delay: 5s; transform: scale(0.9); }
+        .sakura-petal:nth-child(9) { left: 95%; animation-delay: 7s; transform: scale(1.2); }
+        .sakura-petal:nth-child(10) { left: 5%; animation-delay: 9s; transform: scale(0.8); }
+        
+        /* Logo and light effect */
+        .logo-sun {
+            position: relative;
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background-color: var(--off-white);
+            border-radius: 50%;
+            box-shadow: 0 0 40px 10px rgba(255, 255, 255, 0.8), 0 0 60px 20px rgba(255, 255, 255, 0.6), 0 0 80px 30px rgba(255, 255, 255, 0.4);
+            transition: box-shadow 0.5s ease-in-out;
+        }
+
+        .logo-sun:hover {
+            box-shadow: 0 0 50px 15px rgba(255, 255, 255, 0.9), 0 0 70px 25px rgba(255, 255, 255, 0.7), 0 0 90px 35px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card-container {
+                /* Tăng chiều cao trên mobile để phù hợp hơn */
+                height: 700px; 
+                max-width: 450px; /* Giới hạn chiều rộng trên mobile */
+            }
+            .card-inside {
+                flex-direction: column;
+            }
+            .page-left, .page-right {
+                width: 100%;
+                height: 50%;
+            }
+            .page-left {
+                border-right: none;
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+                border-radius: 1rem 1rem 0 0;
+            }
+             .page-left img {
+                border-radius: 1rem 1rem 0 0;
+            }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.2rem; }
+            p { font-size: 0.9rem; }
+            .logo-sun { padding: 1rem 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card-container cursor-pointer" onclick="document.querySelector('.card-container').classList.toggle('open')">
+        <!-- Front of the card -->
+        <div class="card-page card-front">
+            <div class="sakura-bg">
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+                <div class="sakura-petal"></div>
+            </div>
+            <div class="relative z-10 flex flex-col items-center">
+                <div class="logo-sun">
+                    <h1 class="text-4xl font-bold text-red-500">SAKUKO</h1>
+                </div>
+                <p class="mt-8 text-xl text-center text-red-600 font-bold tracking-wide">
+                    🎉 “Chúc mừng Sinh nhật Sakuko <br>Tỏa sáng quang vinh” 🎉
+                </p>
+            </div>
+        </div>
+
+        <!-- Inside of the card -->
+        <div class="card-page card-inside">
+            <!-- Left Page: Image -->
+            <div class="page-left">
+                <!-- Sửa link ảnh Dropbox bằng cách thay dl=0 thành dl=1 để có link trực tiếp -->
+                <img src="https://www.dropbox.com/scl/fi/8y7uq3o52t0q1z914ind7/IT-team-chibi.png?rlkey=05jn3rwlv6366o0k275sgu9wy&st=s2f855i3&dl=1" 
+                     alt="Team IT Chibi"
+                     onerror="this.onerror=null;this.src='https://placehold.co/300x400/fbecec/f0a3a3?text=Image+Not+Found';">
+            </div>
+            <!-- Right Page: Text -->
+            <div class="page-right">
+                <!-- Thêm logo Sakuko, sử dụng absolute positioning để đặt lên trên -->
+                <img src="https://www.dropbox.com/scl/fi/1wiijlndkhncprsi3cfyv/logo-SKK-retailer-02.png?rlkey=y35rjgn980v8u81vvh0gouprh&st=slh9pog1&dl=1" 
+                     alt="Sakuko Logo" 
+                     class="absolute top-8 left-1/2 -translate-x-1/2 w-52 h-auto">
+                <p class="text-xl font-bold text-red-600 px-4">
+                    Phòng Công nghệ Thông tin <br>Chúc Sakuko tuổi mới thành công!
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
